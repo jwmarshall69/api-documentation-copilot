@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: DocuGuard API
+  version: 0.1.0
+  summary: Review API documentation and return structured findings.
+  license:
+    name: MIT
+    identifier: MIT
+  description: |
+    The DocuGuard API creates documentation-review jobs and returns their
+    status. Findings are recommendations that require review by a technical
+    writer before publication.
+servers:
+  - url: https://api.docuguard.dev/v1
+    description: Fictional production server used for this portfolio project
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Reviews
+    description: Create and retrieve documentation-review jobs.
+paths:
+  /reviews:
+    post:
+      tags:
+        - Reviews
+      operationId: createReview
+      summary: Create a review job
+      description: Submits API-documentation content for selected quality checks.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReviewRequest'
+            example:
+              content: The endpoint gets user stuff and returns it.
+              contentType: endpoint-description
+              checks:
+                - clarity
+                - terminology
+                - examples
+      responses:
+        '202':
+          description: The review job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewJob'
+              example:
+                id: rev_01J8Z7K3F2ACM9P4T6QX
+                status: queued
+                createdAt: '2026-08-11T08:00:00Z'
+        '400':
+          description: The request body is invalid.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                type: https://api.docuguard.dev/problems/validation-error
+                title: Request validation failed
+                status: 400
+                detail: The content field must contain at least 20 characters.
+                requestId: req_01J8Z7MMNV4Q2E6H7K9A
+        '401':
+          description: The API key is missing or invalid.
+  /reviews/{reviewId}:
+    get:
+      tags:
+        - Reviews
+      operationId: getReview
+      summary: Get a review job
+      description: Returns the status and available results for a review job.
+      parameters:
+        - $ref: '#/components/parameters/ReviewId'
+      responses:
+        '200':
+          description: The review job was found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewJob'
+              example:
+                id: rev_01J8Z7K3F2ACM9P4T6QX
+                status: processing
+                createdAt: '2026-08-11T08:00:00Z'
+        '401':
+          description: The API key is missing or invalid.
+        '404':
+          description: No review job exists for the supplied ID.
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key used to authenticate a request.
+  parameters:
+    ReviewId:
+      name: reviewId
+      in: path
+      required: true
+      description: Unique ID of the review job.
+      schema:
+        type: string
+        pattern: '^rev_[A-Za-z0-9]+$'
+      example: rev_01J8Z7K3F2ACM9P4T6QX
+  schemas:
+    CreateReviewRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - content
+        - contentType
+        - checks
+      properties:
+        content:
+          type: string
+          minLength: 20
+          description: API-documentation text to review.
+        contentType:
+          type: string
+          description: Kind of documentation submitted for review.
+          enum:
+            - endpoint-description
+            - tutorial
+            - error-message
+        checks:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          description: Quality checks to perform.
+          items:
+            type: string
+            enum:
+              - clarity
+              - terminology
+              - examples
+              - completeness
+    ReviewJob:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - status
+        - createdAt
+      properties:
+        id:
+          type: string
+          description: Unique ID of the review job.
+        status:
+          type: string
+          description: Current processing state of the review job.
+          enum:
+            - queued
+            - processing
+            - completed
+            - failed
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the review job was created.
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - requestId
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI that identifies the problem type.
+        title:
+          type: string
+          description: Short summary of the problem.
+        status:
+          type: integer
+          description: HTTP status code.
+        detail:
+          type: string
+          description: Explanation specific to this request.
+        requestId:
+          type: string
+          description: ID used to trace the request when contacting support.
