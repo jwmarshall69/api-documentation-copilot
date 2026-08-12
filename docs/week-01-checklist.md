@@ -22,7 +22,7 @@ Complete these activities before requesting Week 2.
 
 - [X] Create a new GitHub repository named `api-documentation-copilot`.
 - [X] Add these starter files using GitHub Desktop or Visual Studio Code.
-- [ ] Commit with the message `Add Week 1 project foundation`.
+- [X] Commit with the message `Add Week 1 project foundation`.
 - [X] Push the repository to GitHub.
 - [X] Create an issue titled `Review Week 1 API design`.
 
