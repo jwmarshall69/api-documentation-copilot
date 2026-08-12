@@ -4,14 +4,14 @@ Complete these activities before requesting Week 2.
 
 ## Review the foundation
 
-- [ ] Read `README.md` and explain the project in your own words.
-- [ ] Read `docs/project-brief.md` and confirm the problem and audience make sense.
-- [ ] Review the functional and documentation requirements.
-- [ ] Review the style-guide terminology.
+- [X] Read `README.md` and explain the project in your own words.
+- [X] Read `docs/project-brief.md` and confirm the problem and audience make sense.
+- [X] Review the functional and documentation requirements.
+- [X] Review the style-guide terminology.
 
 ## Review the API design
 
-- [ ] Open `openapi/openapi.yaml` in Visual Studio Code.
+- [X] Open `openapi/openapi.yaml` in Visual Studio Code.
 - [ ] Identify the API server URL and authentication method.
 - [ ] Identify the two initial operations.
 - [ ] Trace `CreateReviewRequest` from request to example.
@@ -20,11 +20,11 @@ Complete these activities before requesting Week 2.
 
 ## Practice the GitHub workflow
 
-- [ ] Create a new GitHub repository named `api-documentation-copilot`.
-- [ ] Add these starter files using GitHub Desktop or Visual Studio Code.
+- [X] Create a new GitHub repository named `api-documentation-copilot`.
+- [X] Add these starter files using GitHub Desktop or Visual Studio Code.
 - [ ] Commit with the message `Add Week 1 project foundation`.
-- [ ] Push the repository to GitHub.
-- [ ] Create an issue titled `Review Week 1 API design`.
+- [X] Push the repository to GitHub.
+- [X] Create an issue titled `Review Week 1 API design`.
 
 ## Reflection
 
