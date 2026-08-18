@@ -7,7 +7,7 @@
 | FR-01 | A client can create a documentation-review job. | 1 |
 | FR-02 | A client can retrieve a review job by ID. | 1 |
 | FR-03 | A request can select one or more review checks. | 1 |
-| FR-04 | A completed job returns structured findings. | 2 |
+| FR-04 | A completed job returns structured findings. | 2 — implemented |
 | FR-05 | The future agent retrieves relevant style guidance before generating findings. | 6 |
 | FR-06 | A human can evaluate recommendations before changing source content. | 5 |
 
@@ -38,4 +38,3 @@
 - Expected errors are documented.
 - Terminology matches the style guide.
 - The example conforms to the schema.
-
