@@ -32,13 +32,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateReviewRequest'
-            example:
-              content: The endpoint gets user stuff and returns it.
-              contentType: endpoint-description
-              checks:
-                - clarity
-                - terminology
-                - examples
+            examples:
+              endpointDescription:
+                $ref: '#/components/examples/CreateReviewRequestExample'
       responses:
         '202':
           description: The review job was accepted.
@@ -46,24 +42,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReviewJob'
-              example:
-                id: rev_01J8Z7K3F2ACM9P4T6QX
-                status: queued
-                createdAt: '2026-08-11T08:00:00Z'
+              examples:
+                queuedReview:
+                  $ref: '#/components/examples/QueuedReviewExample'
         '400':
           description: The request body is invalid.
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Error'
-              example:
-                type: https://api.docuguard.dev/problems/validation-error
-                title: Request validation failed
-                status: 400
-                detail: The content field must contain at least 20 characters.
-                requestId: req_01J8Z7MMNV4Q2E6H7K9A
+              examples:
+                validationError:
+                  $ref: '#/components/examples/ValidationErrorExample'
         '401':
           description: The API key is missing or invalid.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                authenticationError:
+                  $ref: '#/components/examples/AuthenticationErrorExample'
   /reviews/{reviewId}:
     get:
       tags:
@@ -80,14 +79,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReviewJob'
-              example:
-                id: rev_01J8Z7K3F2ACM9P4T6QX
-                status: processing
-                createdAt: '2026-08-11T08:00:00Z'
+              examples:
+                completedReview:
+                  $ref: '#/components/examples/CompletedReviewExample'
         '401':
           description: The API key is missing or invalid.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                authenticationError:
+                  $ref: '#/components/examples/AuthenticationErrorExample'
         '404':
           description: No review job exists for the supplied ID.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                reviewNotFound:
+                  $ref: '#/components/examples/ReviewNotFoundExample'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -160,6 +172,55 @@ components:
           type: string
           format: date-time
           description: Date and time when the review job was created.
+        completedAt:
+          type: string
+          format: date-time
+          description: Date and time when processing finished.
+        findings:
+          type: array
+          description: Recommendations available when the review is completed.
+          items:
+            $ref: '#/components/schemas/Finding'
+    Finding:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - check
+        - severity
+        - message
+        - suggestion
+        - requiresHumanReview
+      properties:
+        id:
+          type: string
+          description: Unique ID of the finding within the review job.
+          pattern: '^find_[A-Za-z0-9]+$'
+        check:
+          type: string
+          description: Quality check that produced the finding.
+          enum:
+            - clarity
+            - terminology
+            - examples
+            - completeness
+        severity:
+          type: string
+          description: Suggested priority of the finding.
+          enum:
+            - low
+            - medium
+            - high
+        message:
+          type: string
+          description: Explanation of the documentation issue.
+        suggestion:
+          type: string
+          description: Proposed revision for a technical writer to evaluate.
+        requiresHumanReview:
+          type: boolean
+          const: true
+          description: Indicates that the recommendation requires human review.
     Error:
       type: object
       additionalProperties: false
@@ -186,3 +247,63 @@ components:
         requestId:
           type: string
           description: ID used to trace the request when contacting support.
+  examples:
+    CreateReviewRequestExample:
+      summary: Review an unclear endpoint description
+      value:
+        content: The endpoint gets user stuff and returns it.
+        contentType: endpoint-description
+        checks:
+          - clarity
+          - terminology
+          - examples
+    QueuedReviewExample:
+      summary: Newly queued review job
+      value:
+        id: rev_01J8Z7K3F2ACM9P4T6QX
+        status: queued
+        createdAt: '2026-08-11T08:00:00Z'
+    CompletedReviewExample:
+      summary: Completed review with structured findings
+      value:
+        id: rev_01J8Z7K3F2ACM9P4T6QX
+        status: completed
+        createdAt: '2026-08-11T08:00:00Z'
+        completedAt: '2026-08-11T08:00:03Z'
+        findings:
+          - id: find_01J8Z8AC4G7N2M5Q9R3B
+            check: clarity
+            severity: high
+            message: The phrase "user stuff" does not identify the resource.
+            suggestion: Name the resource returned by the endpoint.
+            requiresHumanReview: true
+          - id: find_01J8Z8B91KD6P4W2F7HX
+            check: examples
+            severity: medium
+            message: The description does not refer to a response example.
+            suggestion: Add a representative success response example.
+            requiresHumanReview: true
+    ValidationErrorExample:
+      summary: Request content is too short
+      value:
+        type: https://api.docuguard.dev/problems/validation-error
+        title: Request validation failed
+        status: 400
+        detail: The content field must contain at least 20 characters.
+        requestId: req_01J8Z7MMNV4Q2E6H7K9A
+    AuthenticationErrorExample:
+      summary: API key is missing
+      value:
+        type: https://api.docuguard.dev/problems/authentication-error
+        title: Authentication failed
+        status: 401
+        detail: Provide a valid API key in the X-API-Key header.
+        requestId: req_01J8Z9F0CE2W6M3T7N4K
+    ReviewNotFoundExample:
+      summary: Review job does not exist
+      value:
+        type: https://api.docuguard.dev/problems/review-not-found
+        title: Review job not found
+        status: 404
+        detail: No review job exists with ID rev_NOTFOUND.
+        requestId: req_01J8ZA2K9M5V3C7Q4H6R
