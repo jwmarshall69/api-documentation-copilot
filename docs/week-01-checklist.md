@@ -12,11 +12,11 @@ Complete these activities before requesting Week 2.
 ## Review the API design
 
 - [X] Open `openapi/openapi.yaml` in Visual Studio Code.
-- [ ] Identify the API server URL and authentication method.
-- [ ] Identify the two initial operations.
-- [ ] Trace `CreateReviewRequest` from request to example.
-- [ ] Trace `ReviewJob` from response to example.
-- [ ] Confirm that the `400` error example follows the `Error` schema.
+- [X] Identify the API server URL and authentication method.
+- [X] Identify the two initial operations.
+- [X] Trace `CreateReviewRequest` from request to example.
+- [X] Trace `ReviewJob` from response to example.
+- [X] Confirm that the `400` error example follows the `Error` schema.
 
 ## Practice the GitHub workflow
 
@@ -48,7 +48,7 @@ The `components` section needs more explanation and practice because it defines 
 
 ## Completion confirmation
 
-- [ ] Every checklist item is complete.
+- [X] Every checklist item is complete.
 - [X] All four reflections are written.
 - [X] The Week 1 commit is visible on GitHub.
 
