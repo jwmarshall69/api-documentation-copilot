@@ -5,18 +5,18 @@ Complete these activities before requesting Week 3.
 ## Review the expanded contract
 
 - [X] Read `docs/week-02-api-design.md`.
-- [ ] Identify the new `Finding` schema and explain its purpose.
-- [ ] Trace `ReviewJob.findings` to the `Finding` schema.
-- [ ] Trace the `GET /reviews/{reviewId}` `200` response to `CompletedReviewExample`.
-- [ ] Confirm that both findings in the completed example follow the `Finding` schema.
+- [X] Identify the new `Finding` schema and explain its purpose.
+- [X] Trace `ReviewJob.findings` to the `Finding` schema.
+- [X] Trace the `GET /reviews/{reviewId}` `200` response to `CompletedReviewExample`.
+- [X] Confirm that both findings in the completed example follow the `Finding` schXma.
 - [ ] Explain why `requiresHumanReview` uses `const: true`.
 
 ## Review request and error examples
 
-- [ ] Trace the `POST /reviews` request to `CreateReviewRequestExample`.
-- [ ] Confirm that the `400`, `401`, and `404` examples follow the `Error` schema.
-- [ ] Confirm that each error example's `status` matches its HTTP response code.
-- [ ] Confirm that no example contains an actual API key or personal information.
+- [X] Trace the `POST /reviews` request to `CreateReviewRequestExample`.
+- [X] Confirm that the `400`, `401`, and `404` examples follow the `Error` schema.
+- [X] Confirm that each error example's `status` matches its HTTP response code.
+- [X] Confirm that no example contains an actual API key or personal information.
 
 ## Validate the OpenAPI contract
 
