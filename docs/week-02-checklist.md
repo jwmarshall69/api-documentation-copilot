@@ -61,4 +61,3 @@ The contract provides stable operation IDs, clearly defined schemas, constrained
 - [X] The OpenAPI contract passes validation.
 - [X] All four reflections are written.
 - [X] The Week 2 pull request is visible on GitHub.
-
